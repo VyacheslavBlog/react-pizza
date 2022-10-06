@@ -1,13 +1,13 @@
 import React from 'react';
 import { PizzaBlock } from './pizzaBlock';
+import pizzas from '../../assets/pizzas.json';
 
 export const Pizza = () => {
   return (
     <div className="content__items">
-      <PizzaBlock title="Мексиканская" price="500" />
-      <PizzaBlock />
-      <PizzaBlock />
-      <PizzaBlock />
+      {pizzas.map((obj) => (
+        <PizzaBlock {...obj} />
+      ))}
     </div>
   );
 };
