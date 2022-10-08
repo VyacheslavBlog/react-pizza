@@ -1,6 +1,18 @@
 import React from 'react';
 
 export const Sort = () => {
+  const [activeWindow, setActiveWindow] = React.useState(false);
+  const [activeSort, setActiveSort] = React.useState(0);
+
+  const sortMenu = ['популярности', 'цене', 'алфавиту'];
+
+  const onClickSortMenu = (index) => {
+    setActiveWindow(!activeWindow);
+    setActiveSort(index);
+  };
+
+  const sortName = sortMenu[activeSort];
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -16,15 +28,22 @@ export const Sort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span onClick={() => setActiveWindow(!activeWindow)}>{sortName}</span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {activeWindow && (
+        <div className="sort__popup">
+          <ul>
+            {sortMenu.map((name, i) => (
+              <li
+                onClick={() => onClickSortMenu(i)}
+                key={name}
+                className={activeSort === i ? 'active' : ''}>
+                {name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
