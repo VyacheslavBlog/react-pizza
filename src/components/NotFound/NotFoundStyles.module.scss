@@ -1,0 +1,16 @@
+.root{
+    text-align: center;
+}
+.btn{
+    display: block;
+    text-align: center;
+    font-size: 36px;
+    color: #FE5F1E;
+    max-width: 100%;
+    margin: 30px auto 0 ;
+    transition: all .2s linear;
+    &:hover{
+        text-shadow:0 0 5px  #FE5F1E;
+    }
+
+}

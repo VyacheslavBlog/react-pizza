@@ -1,7 +1,7 @@
 import React from 'react';
-import { Categories } from './categories';
-import { Pizza } from './pizza';
-import { Sort } from './sort';
+import { Categories } from '../components/Home/categories';
+import { Pizza } from '../components/Home/pizza';
+import { Sort } from '../components/Home/sort';
 
 export const Home = () => {
   return (
