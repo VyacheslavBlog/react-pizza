@@ -1,0 +1,52 @@
+.root{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+
+    li{
+        margin-left: 20px;
+        transition: all .2s linear;
+        background-color: orange;
+        border-radius: 40px;
+        border:1px solid #333;
+
+        &:hover{
+            background-color: red;
+        }
+
+        &:first-child{
+            margin-left: 0;
+        }
+    }
+    a{
+        display: block;
+        text-align: center;
+        width: 30px;
+        height: 30px;
+        font-weight: 700;
+        font-size: 18px;
+        cursor: pointer;
+        padding:3px 10px 0 10px;
+        color: rgb(4, 13, 50);
+    }
+
+    :global{
+        .selected{  
+            a{
+            background-color: red;
+            border-radius: 40px;
+            width: 100%;
+            height: 100%;
+        }
+        }
+
+        .disabled{
+            a{
+            background-color: #333;
+            border-radius: 40px;
+            width: 100%;
+            }
+        }
+    }
+
+}
