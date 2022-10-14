@@ -1,10 +1,12 @@
 import React from 'react';
+import { searchContext } from '../App';
 import { Categories } from '../components/Home/categories';
 import Pagination from '../components/Home/pagination';
 import { Pizza } from '../components/Home/pizza';
 import { Sort } from '../components/Home/sort';
 
-export const Home = ({ searchValue }) => {
+export const Home = () => {
+  const { searchValue } = React.useContext(searchContext);
   //https://63404624e44b83bc73cd3e47.mockapi.io/items
   const [idCategories, setIdCategories] = React.useState(0);
   const [activeSort, setActiveSort] = React.useState({
@@ -17,7 +19,7 @@ export const Home = ({ searchValue }) => {
 
   const order = activeSort.sortProperty.includes('-') ? 'asc' : 'desc';
   const sortBy = activeSort.sortProperty.replace('-', '');
-  const category = idCategories > 0 ? `category=${idCategories}` : '';
+  const category = idCategories > 0 ? `&category=${idCategories}` : '';
   const search = searchValue ? `&search=${searchValue}` : '';
 
   React.useEffect(() => {

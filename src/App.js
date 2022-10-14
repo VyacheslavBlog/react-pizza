@@ -6,19 +6,37 @@ import { Cart } from './pages/Cart';
 import { NotFound } from './pages/NotFound';
 import React from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { decrement, increment } from './redux/slices/countSlice';
+export const searchContext = React.createContext();
+
 function App() {
   const [searchValue, setSearchValue] = React.useState('');
 
-  console.log('input changed ' + searchValue);
+  const count = useSelector((state) => state.counter.count);
+  const dispatch = useDispatch();
 
   return (
     <div className="wrapper">
-      <Header searchValue={searchValue} setSearchValue={setSearchValue} />
-      <Routes>
-        <Route path="/" element={<Home searchValue={searchValue} />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <div>
+        <div>
+          <button aria-label="Increment value" onClick={() => dispatch(increment())}>
+            Increment
+          </button>
+          <span>{count}</span>
+          <button aria-label="Decrement value" onClick={() => dispatch(decrement())}>
+            Decrement
+          </button>
+        </div>
+      </div>
+      {/* <searchContext.Provider value={{ searchValue, setSearchValue }}>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </searchContext.Provider> */}
     </div>
   );
 }

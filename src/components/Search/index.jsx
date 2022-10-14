@@ -1,7 +1,9 @@
 import React from 'react';
+import { searchContext } from '../../App';
 import style from './search.module.scss';
 
-const Search = ({ searchValue, setSearchValue }) => {
+const Search = () => {
+  const { searchValue, setSearchValue } = React.useContext(searchContext);
   return (
     <div className={style.root}>
       {searchValue && (
