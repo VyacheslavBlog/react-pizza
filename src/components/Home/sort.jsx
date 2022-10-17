@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveSort } from '../../redux/slices/filterSlice';
 
-const sortMenu = [
+export const sortMenu = [
   { name: 'популярности(DESC)', sortProperty: 'rating' },
   { name: 'популярности(ASC)', sortProperty: '-rating' },
   { name: 'цене(DESC)', sortProperty: 'price' },
@@ -15,6 +15,8 @@ export const Sort = () => {
   const sort = useSelector((state) => state.filter.sort);
   const dispatch = useDispatch();
 
+  const sortRef = React.useRef();
+
   const [openWindow, setOpenWindow] = React.useState(false);
 
   const onClickSortMenu = (index) => {
@@ -25,8 +27,19 @@ export const Sort = () => {
     setOpenWindow(!openWindow);
   };
 
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.path.includes(sortRef.current)) {
+        setOpenWindow(false);
+      }
+    };
+    document.body.addEventListener('click', handleClickOutside);
+
+    return document.body.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"

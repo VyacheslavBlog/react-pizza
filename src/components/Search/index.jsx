@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { searchContext } from '../../App';
 import style from './search.module.scss';
+import debounce from 'lodash.debounce';
+import { setSearchValue } from '../../redux/slices/filterSlice';
+import { useDispatch } from 'react-redux';
 
 const Search = () => {
-  const { searchValue, setSearchValue } = React.useContext(searchContext);
+  const [value, setValue] = React.useState('');
+  const dispatch = useDispatch();
+
+  const inputRef = useRef();
+
+  const onClickClear = () => {
+    dispatch(setSearchValue(''));
+    setValue('');
+    inputRef.current.focus();
+  };
+
+  const updateSearchValue = useCallback(
+    debounce((str) => {
+      dispatch(setSearchValue(str));
+    }, 400),
+    [],
+  );
+
+  const onChangeInput = (event) => {
+    setValue(event.target.value);
+    updateSearchValue(event.target.value);
+  };
+
   return (
     <div className={style.root}>
-      {searchValue && (
-        <svg
-          onClick={() => setSearchValue('')}
-          className={style.clear}
-          height="48"
-          viewBox="0 0 48 48"
-          width="48"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M38 12.83l-2.83-2.83-11.17 11.17-11.17-11.17-2.83 2.83 11.17 11.17-11.17 11.17 2.83 2.83 11.17-11.17 11.17 11.17 2.83-2.83-11.17-11.17z" />
-          <path d="M0 0h48v48h-48z" fill="none" />
-        </svg>
-      )}
       <svg
         className={style.icon}
         enableBackground="new 0 0 32 32"
@@ -31,12 +44,25 @@ const Search = () => {
         />
       </svg>
       <input
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
+        ref={inputRef}
+        value={value}
+        onChange={onChangeInput}
         className={style.input}
         placeholder="Поиск пиццы"
         type="text"
       />
+      {value && (
+        <svg
+          onClick={onClickClear}
+          className={style.clear}
+          height="48"
+          viewBox="0 0 48 48"
+          width="48"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M38 12.83l-2.83-2.83-11.17 11.17-11.17-11.17-2.83 2.83 11.17 11.17-11.17 11.17 2.83 2.83 11.17-11.17 11.17 11.17 2.83-2.83-11.17-11.17z" />
+          <path d="M0 0h48v48h-48z" fill="none" />
+        </svg>
+      )}
     </div>
   );
 };

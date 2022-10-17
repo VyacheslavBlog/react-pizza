@@ -7,13 +7,13 @@ export const Header = () => {
   return (
     <div className="header">
       <div className="container">
-        <div className="header__logo">
+        <NavLink to={'/'} className="header__logo">
           <img width="38" src={pizzaLogo} alt="Pizza logo" />
           <div>
             <h1>React Pizza</h1>
             <p>самая вкусная пицца во вселенной</p>
           </div>
-        </div>
+        </NavLink>
         <Search />
         <div className="header__cart">
           <NavLink to="/cart" className="button button--cart">
