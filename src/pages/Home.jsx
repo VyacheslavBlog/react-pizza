@@ -4,11 +4,11 @@ import Pagination from '../components/Home/pagination';
 import { Pizza } from '../components/Home/pizza';
 import { Sort, sortMenu } from '../components/Home/sort';
 import qs from 'qs';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import { fetchPizzas } from '../redux/slices/pizzasSlice';
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -31,24 +31,24 @@ export const Home = () => {
   };
 
   //https://63404624e44b83bc73cd3e47.mockapi.io/items
-  const [items, setItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
 
-  const order = sortType.includes('-') ? 'asc' : 'desc';
-  const sortBy = sortType.replace('-', '');
-  const category = categoryId > 0 ? `&category=${categoryId}` : '';
-  const search = searchValue ? `&search=${searchValue}` : '';
+  const getPizzas = async () => {
+    const order = sortType.includes('-') ? 'asc' : 'desc';
+    const sortBy = sortType.replace('-', '');
+    const category = categoryId > 0 ? `&category=${categoryId}` : '';
+    const search = searchValue ? `&search=${searchValue}` : '';
 
-  const fetchPizzas = () => {
-    setIsLoading(true);
-    axios
-      .get(
-        `https://63404624e44b83bc73cd3e47.mockapi.io/items?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`,
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+    dispatch(
+      fetchPizzas({
+        order,
+        sortBy,
+        category,
+        search,
+        currentPage,
+      }),
+    );
+
+    window.scrollTo(0, 0);
   };
   //Если был первый рендер, то проверяем URL-параметры и вносим их в редакс
   React.useEffect(() => {
@@ -69,12 +69,9 @@ export const Home = () => {
 
   //если был первый рендер, то запрашиваем пиццы
   React.useEffect(() => {
-    window.scrollTo(0, 0);
-    if (!isSearch.current) {
-      fetchPizzas();
-    }
+    getPizzas();
     isSearch.current = false;
-  }, [categoryId, sortType, searchValue, currentPage, order, sortBy, category, search]);
+  }, [categoryId, sortType, searchValue, currentPage]);
 
   //Если изменили параметры и первый рендер
   React.useEffect(() => {
@@ -97,7 +94,7 @@ export const Home = () => {
           <Sort />
         </div>
         <h2 className="content__title">Все пиццы</h2>
-        <Pizza searchValue={searchValue} isLoading={isLoading} items={items} />
+        <Pizza searchValue={searchValue} />
         <Pagination currentPage={currentPage} onChangePage={onChangePage} />
       </div>
     </div>
